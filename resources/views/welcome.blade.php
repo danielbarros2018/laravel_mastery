@@ -22,7 +22,7 @@
                     <h6>Em: {{$event->start_date->format('d/m/Y H:i')}}</h6>
 {{--                    <h6>Em: {{$event->created_at->format('d/m/Y H:i:s')}}</h6>--}}
                     <p class="card-text">{{$event->description}}</p>
-                    <a href="/eventos/{{$event->slug}}" class="btn btn-primary">Ver evento</a>
+                    <a href="{{route('event.single', ['slug' => $event->slug])}}" class="btn btn-primary">Ver evento</a>
                 </div>
             </div>
             </div>
