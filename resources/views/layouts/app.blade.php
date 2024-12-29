@@ -20,8 +20,8 @@
 
 {{--</body>--}}
 {{--</html>--}}
-
-        <!doctype html>
+        
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -34,8 +34,9 @@
     <link rel="canonical" href="http://127.0.0.1:8000">
 
     <!-- Bootstrap core CSS -->
+{{--    <link href="{{asset('css/app.css')}}" rel="stylesheet">--}}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
 
@@ -173,7 +174,12 @@
     </button>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sair</a>
+            <a class="nav-link" href="#" onclick="
+                event.preventDefault();
+                document.getElementById('logout').submit()">Sair</a>
+            <form action="{{route('logout')}}" method="post" id="logout">
+                @csrf
+            </form>
         </li>
     </ul>
 </nav>
@@ -207,6 +213,8 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
 
+@yield('scripts')
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +18,12 @@ class UsersTableSeeder extends Seeder
             'email' => 'danielbarros.android@gmail.com',
         ]);
 
-        User::factory(15)
+        User::factory(8)
+            ->has(
+                Event::factory(10)
+                    ->hasPhotos(5)
+                    ->hasCategories(3)
+            )
             ->hasProfile()
             ->create();
     }
