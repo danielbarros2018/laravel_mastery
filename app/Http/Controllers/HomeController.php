@@ -2,22 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Event;
 
 class HomeController extends Controller
 {
+    private Event $event;
+
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
+
     public function index()
     {
-        $events = Event::all();
-
-        //    dd($events);
-        //    $events = [];
-        return view('welcome', compact('events'));
+        $byCategory = request()->has('category') 
+            ? Category::whereSlug(request()->get('category'))->first()->events()
+            : null;
+        
+        $events = $this->event->getEventsHome($byCategory)->paginate(15);
+        
+        return view('home', compact('events'));
     }
 
     public function show($slug)
     {
-        $event = Event::whereSlug($slug)->first();
+        $event = $this->event->whereSlug($slug)->first();
         return view('event', compact('event'));
     }
 }
