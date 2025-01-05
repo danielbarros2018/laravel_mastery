@@ -6,7 +6,8 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\Hello\HelloWorldController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\ProfileController as AdmProfile;
+use App\Http\Controllers\ResController;
+use App\Http\Middleware\CheckUserCanEditEventMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/hello-world', [HelloWorldController::class, 'helloWorld']);
@@ -18,20 +19,42 @@ Route::get('/eventos/{event:slug}', [HomeController::class, 'show'])->name('even
 
 
 // CRUD de Eventos...
-Route::middleware(['auth','verified'])->prefix('/admin')->name('admin.')->group(function () {
-   Route::resource('events', EventController::class);
+Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
+//    Route::prefix('/events')->name('events.')->group(function () {
+//        Route::get('/', [EventController::class, 'index'])->name('index');
+//
+//        Route::get('/create', [EventController::class, 'create'])->name('create');
+//        Route::post('/store', [EventController::class, 'store'])->name('store');
+//
+//        Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit');
+//        Route::post('/update/{event}', [EventController::class, 'update'])->name('update');
+//
+//        Route::get('/destroy/{event}', [EventController::class, 'destroy'])->name('destroy');
+//    });
+    
+//    Route::resource('events', EventController::class)->except('destroy');
+    
+//    Route::resource('events', EventController::class)->middleware(CheckUserCanEditEventMiddleware::class);
+//    Route::resource('events', EventController::class)->middleware('user.can.edit.event ');
+    Route::resource('events', EventController::class);
     Route::resource('events.photos', EventPhotoController::class)
         ->only(['index', 'store', 'destroy']);
     
-    Route::get('profile', [AdmProfile::class, 'edit'])->name('profile.edit');
-    Route::put('profile', [AdmProfile::class, 'update'])->name('profile.update');
+//    Route::resources([
+//        'events' => EventController::class,
+//        'events.photos' => EventPhotoController::class
+//    ],
+//    [
+//        'except' => ['destroy']
+//    ]);
+    
 });
 
 // Enrollment
 Route::prefix('/enrollment')->name('enrollment.')->group(function(){
     Route::get('/start/{event:slug}', [EnrollmentController::class, 'start'])->name('start');
-    Route::get('/confirm', [EnrollmentController::class, 'confirm'])->name('confirm')->middleware(['auth', 'verified']);
-    Route::get('/process', [EnrollmentController::class, 'process'])->name('process')->middleware(['auth', 'verified']);
+    Route::get('/confirm', [EnrollmentController::class, 'confirm'])->name('confirm')->middleware('auth');
+    Route::get('/process', [EnrollmentController::class, 'process'])->name('process')->middleware('auth');
 });
 
 // ----------------------------------------------------
@@ -44,24 +67,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-Route::get('/email/verify', function () {
-    return view('auth.verify');
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-
-    return redirect('/home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-
 require __DIR__ . '/auth.php';
 
 Auth::routes();

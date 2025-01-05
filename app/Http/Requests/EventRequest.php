@@ -25,6 +25,7 @@ class EventRequest extends FormRequest
             'title' => 'required',
             'description' => 'required|string|max:255|min:5',
             'start_date' => 'required|date|after:today',
+            'banner' => 'image'
         ];
     }
 
@@ -37,6 +38,7 @@ class EventRequest extends FormRequest
             'string' => 'Este campo deve ser uma string',
             'date' => 'Este campo deve ser uma data',
             'after' => 'A data deve ser maior que a data atual',
+            'image' => 'O arquivo precisa ser uma imagem'
         ];
     }
 }

@@ -9,6 +9,13 @@ class Profile extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['about','phone','social_networks'];
+
+    public function getSocialNetworksAttirbute()
+    {
+        return $this->attributes['social_networks'] ? json_decode($this->attributes['social_networks'], true) : [];
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class);

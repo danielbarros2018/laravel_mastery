@@ -16,7 +16,7 @@ class CheckUserCanEditEventMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $event = Event::find($request->route()->parameter('event'));
+        $event = $request->route()->parameter('event');
         if (!auth()->user()->events->contains($event)) {
             abort(403, 'Usuário não pode acessar este evento.');
         }

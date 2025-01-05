@@ -36,11 +36,34 @@
                 <input class="form-control me-2" type="search" placeholder="Procurar evento..." aria-label="Search" name="s" value="{{request()->query('s')}}">
                 <button class="btn btn-outline-success" type="submit">Procurar</button>
             </form>
+            
+            <ul class="navbar-nav">
+                @auth()
+                    <li class="nav-item">
+                        <a href="{{route('admin.events.index')}}" class="nav-link">Meu Painel</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href="{{route('login')}}" class="nav-link">Acessar</a>
+                    </li>
+                @endauth
+                
+{{--                @guest()--}}
+{{--                @else--}}
+{{--                @endguest--}}
+            </ul>
         </div>
     </div>
 </nav>
 
 <div class="container">
+{{--    Messages--}}
+    <div class="row">
+        <div class="col-12">
+            @include('messages.bootstrap.messages')
+        </div>
+    </div>
+    
     @yield('content') <!-- Todas as view que extenderem desse layout incluirão o conteu no content (directiva) -->
 </div>
 <script

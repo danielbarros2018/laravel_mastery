@@ -63,10 +63,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $user->profile()->create(['about' => '']);
+                
+        return $user;
+    }
+    
+    protected function registered(Request $request, $user)
+    {
+        if (session()->has('enrollment')) {
+            return redirect()->route('enrollment.confirm');
+        }
     }
 }

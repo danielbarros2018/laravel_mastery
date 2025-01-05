@@ -167,19 +167,27 @@
 
 </head>
 <body>
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+<nav class="navbar navbar-dark navbar-expand-lg justify-content-between sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Meus Eventos</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#" onclick="
-                event.preventDefault();
-                document.getElementById('logout').submit()">Sair</a>
-            <form action="{{route('logout')}}" method="post" id="logout">
-                @csrf
-            </form>
+    <ul class="navbar-nav px-3 flex-row">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{auth()->user()->name}}
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{route('admin.profile.edit')}}">Meu Perfil</a></li>
+                <li>
+                    <a class="dropdown-item" href="#" onclick="
+                        event.preventDefault();
+                        document.getElementById('logout').submit()">Sair</a>
+                    <form action="{{route('logout')}}" method="post" id="logout">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
         </li>
     </ul>
 </nav>
@@ -202,7 +210,14 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-
+            
+            {{--    Messages--}}
+            <div class="row">
+                <div class="col-12">
+                    @include('messages.bootstrap.messages')
+                </div>
+            </div>
+            
             @yield('content')
 
         </main>
@@ -215,6 +230,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
 @yield('scripts')
+
 </body>
 </html>

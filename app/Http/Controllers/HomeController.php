@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Event;
+use App\Services\MessageServices;
 
 class HomeController extends Controller
 {
@@ -25,9 +26,9 @@ class HomeController extends Controller
         return view('home', compact('events'));
     }
 
-    public function show($slug)
+    public function show(Event $event)
     {
-        $event = $this->event->whereSlug($slug)->first();
+//        $event = $this->event->whereSlug($slug)->first();
         return view('event', compact('event'));
     }
 }

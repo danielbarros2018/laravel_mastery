@@ -16,8 +16,7 @@
         @forelse($events as $event)
             <div class="col-4">
                 <div class="card">
-                    <img src="https://via.placeholder.com/640x480.png/002244?text=Sem%20Imagem" alt=""
-                         class="card-img-top">
+                    <img src="https://via.placeholder.com/640x480.png/002244?text=Sem%20Imagem" alt="" class="card-img-top">
                     <div class="card-body">
                         {{ $event->test }}
                         <h5 class="card-title">{{$event->title}}</h5>
@@ -27,7 +26,7 @@
                         
                         <p>Evento organizado por: <a href="#">{{ $event->owner_name }}</a></p>
                         
-                        <a href="{{route('event.single', ['slug' => $event->slug])}}" class="btn btn-primary">Ver
+                        <a href="{{route('event.single', ['event' => $event->slug])}}" class="btn btn-primary">Ver
                             evento</a>
                     </div>
                 </div>

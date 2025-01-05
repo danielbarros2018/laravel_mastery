@@ -5,22 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Event extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
 
-    protected $fillable = ['title', 'description', 'start_date', 'body', 'slug'];
+    protected $fillable = ['title', 'description', 'start_date', 'body', 'slug', 'banner'];
 
     //    protected $dates = ['start_date'];
 
     protected $casts = ['start_date' => 'datetime:Y-m-d H:i:s'];
 
     // Accessors
-    public function getTitleAttribute()
-    {
-        return strtoupper($this->attributes['title']);
-    }
+//    public function getTitleAttribute()
+//    {
+//        return strtoupper($this->attributes['title']);
+//    }
 
     public function getOwnerNameAttribute()
     {
@@ -28,17 +30,18 @@ class Event extends Model
     }
 
     // Mutators
-    public function setSlugAttribute($value)
-    {
-        $this->attributes['slug'] = Str::slug($value);
-    }
-    
-    public function setTitleAttribute($value)
-    {
+//    public function setSlugAttribute($value)
+//    {
 //        $this->attributes['slug'] = Str::slug($value);
-//        $this->attributes['slug'] = Str::slug($value);
-        $this->attributes['title'] = Str::ucfirst($value);
-    }
+//    }
+  
+//    Passa a ser gerado pelo Sluggable
+//    public function setTitleAttribute($value)
+//    {
+////        $this->attributes['slug'] = Str::slug($value);
+////        $this->attributes['slug'] = Str::slug($value);
+//        $this->attributes['title'] = Str::ucfirst($value);
+//    }
 
     public function setStartDateAttribute($value)
     {
@@ -61,6 +64,10 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function enrollments()
+    {
+        return $this->belongsToMany(User::class)->withPivot('reference','status');
+    }
 
     public function getEventsHome($byCategory = null)
     {
@@ -77,6 +84,13 @@ class Event extends Model
         $events->whereDate('start_date', '>=', now());
         
         return $events;
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug');
     }
     
 }
